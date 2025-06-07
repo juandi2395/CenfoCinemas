@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace DataAccess.DAO
         // Paso 2: Redefr el constructor como privado para evitar instanciación externa
         private SqlDAO()
         {
-            _connectionString = string.Empty;
+            _connectionString = @"Data Source=srv-sqldatabase-jgonz2395.database.windows.net;Initial Catalog=cenfocinemas-db;User ID=sysman;Password=Cenfotec123!;Trust Server Certificate=True";
         }
 
         // Paso 3: Crear un método público estático para obtener la instancia de la clase SqlDAO
@@ -41,22 +42,25 @@ namespace DataAccess.DAO
 
         // Metodo para la ejecución de un store procedure sin retorno
 
-        public void ExecuteProcedure(SqlOperation operation)
+        public void ExecuteProcedure(SqlOperation sqlOperation)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
-                using (var command = new SqlCommand(operation.ProcedureName, conn))
+                using (var command = new SqlCommand(sqlOperation.ProcedureName, conn)
                 {
-                    CommandType = System.Data.CommandType.StoredProcedure;
-                }
+                    CommandType = System.Data.CommandType.StoredProcedure
+                })
                 {
-                    foreach (var param in operation.Parameters)
+                    //Set de los parametros
+                    foreach (var param in sqlOperation.Parameters)
                     {
                         command.Parameters.Add(param);
                     }
+                    //Ejectura el SP
+                    conn.Open();
+                    command.ExecuteNonQuery();
                 }
-                conn.Open();
-                command.ExecuteNonQuery();
+
             }
         }
 

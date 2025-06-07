@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,7 +43,21 @@ namespace DataAccess.DAO
 
         public void ExecuteProcedure(SqlOperation operation)
         {
-            // Conectars a la base de datos y ejecutar el store procedure
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                using (var command = new SqlCommand(operation.ProcedureName, conn))
+                {
+                    CommandType = System.Data.CommandType.StoredProcedure;
+                }
+                {
+                    foreach (var param in operation.Parameters)
+                    {
+                        command.Parameters.Add(param);
+                    }
+                }
+                conn.Open();
+                command.ExecuteNonQuery();
+            }
         }
 
         // Metodo para la ejecución de un store procedure con retorno

@@ -1,4 +1,7 @@
-﻿using DataAccess.DAO;
+﻿using DataAccess.CRUD;
+using DataAccess.DAO;
+using DTOs;
+using Newtonsoft.Json;
 using System.Data.SqlTypes;
 
 public class Program
@@ -47,7 +50,7 @@ public class Program
             Console.Clear();
             Console.WriteLine("---- USER MENU ----");
             Console.WriteLine("1. Insert User");
-            Console.WriteLine("2. Update User");
+            Console.WriteLine("2. Show Users");
             Console.WriteLine("3. Delete User");
             Console.WriteLine("4. Back");
             Console.WriteLine("-------------------");
@@ -60,7 +63,14 @@ public class Program
                     InsertUser();
                     break;
                 case "2":
-                    Console.WriteLine("Update User logic here...");
+                    Console.Clear();
+                    var uCrud = new UserCrudFactory();
+                    var listUsers = uCrud.RetrieveAll<User>();
+                    foreach(var u in listUsers)
+                    {
+                        Console.WriteLine(JsonConvert.SerializeObject(u, Formatting.Indented));
+                    }
+                    Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                     break;
                 case "3":
@@ -152,7 +162,20 @@ public class Program
         sqlOperation.AddDateTimeParam("P_BirthDate", birthDate);
         sqlOperation.AddStringParameter("P_Status", status);
 
-        SqlDAO.GetInstance().ExecuteProcedure(sqlOperation);
+        var user = new User()
+        {
+            UserCode = userCode,
+            Name = name,
+            Email = email,
+            Password = password,
+            BirthDate = birthDate,
+            Status = status
+        };
+
+        var uCrud = new UserCrudFactory();
+        uCrud.Create(user);
+
+        //SqlDAO.GetInstance().ExecuteProcedure(sqlOperation);
 
         Console.WriteLine("User inserted successfully. Press any key to continue...");
         Console.ReadKey();

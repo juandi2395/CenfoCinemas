@@ -97,7 +97,7 @@ public class Program
             Console.Clear();
             Console.WriteLine("---- MOVIE MENU ----");
             Console.WriteLine("1. Insert Movie");
-            Console.WriteLine("2. Update Movie");
+            Console.WriteLine("2. Show Movies");
             Console.WriteLine("3. Delete Movie");
             Console.WriteLine("4. Back");
             Console.WriteLine("---------------------");
@@ -110,7 +110,14 @@ public class Program
                     InsertMovie();
                     break;
                 case "2":
-                    Console.WriteLine("Update Movie logic here...");
+                    Console.Clear();
+                    var mCrud = new MovieCrudFactory();
+                    var listMovies = mCrud.RetrieveAll<Movie>();
+                    foreach (var u in listMovies)
+                    {
+                        Console.WriteLine(JsonConvert.SerializeObject(u, Formatting.Indented));
+                    }
+                    Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
                     break;
                 case "3":
@@ -211,7 +218,19 @@ public class Program
         sqlOperation.AddStringParameter("P_Description", description);
         sqlOperation.AddDateTimeParam("P_ReleaseDate", releaseDate);
 
-        SqlDAO.GetInstance().ExecuteProcedure(sqlOperation);
+        var movie = new Movie()
+        {
+            Title = title,
+            Genre = genre,
+            Director = director,
+            Description = description,
+            ReleaseDate = releaseDate
+        };
+
+        var mCrud = new MovieCrudFactory();
+        mCrud.Create(movie);
+
+        //SqlDAO.GetInstance().ExecuteProcedure(sqlOperation);
 
         Console.WriteLine("Movie inserted successfully. Press any key to continue...");
         Console.ReadKey();

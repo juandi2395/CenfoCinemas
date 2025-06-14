@@ -75,7 +75,7 @@ namespace DataAccess.CRUD
             {
                 ID = (int)row["Id"],
                 Created = (DateTime)row["Created"],
-                //Updated = (DateTime)row["Updated"],
+                //Updated = (DateTime)row["Updated"], esto lo ibamos a revisar con el profe
                 UserCode = (string)row["UserCode"],
                 Name = (string)row["Name"],
                 Email = (string)row["Email"],

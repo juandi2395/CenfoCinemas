@@ -1,5 +1,6 @@
 ﻿using DataAccess.DAO;
 using DTOs;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,9 +58,21 @@ namespace DataAccess.CRUD
             return lstUsers;
         }
 
-        public override T RetrieveById<T>()
+        public override T RetrieveById<T>(int iD)
         {
-            throw new NotImplementedException();
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_ID_PR" };
+            sqlOperation.Parameters.Add(new SqlParameter("P_ID", iD));
+
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                var user = BuildUser(row);
+                return (T)Convert.ChangeType(user, typeof(T));
+            }
+
+            return default(T);
         }
 
         public override void Update(BaseDTO baseDTO)
@@ -84,6 +97,34 @@ namespace DataAccess.CRUD
                 Status = (string)row["Status"]
             };
             return user;
+        }
+
+        public T RetrieveByEmail<T>(User user)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_EMAIL_PR" };
+            sqlOperation.AddStringParameter("P_EMAIL", user.Email);
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                var retrievedUser = BuildUser(row);
+                return (T)Convert.ChangeType(retrievedUser, typeof(T));
+            }
+            return default(T);
+        }
+
+        public T RetrieveByUserCode<T>(User user)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_USER_CODE_PR" };
+            sqlOperation.AddStringParameter("P_CODE", user.UserCode);
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                var retrievedUser = BuildUser(row);
+                return (T)Convert.ChangeType(retrievedUser, typeof(T));
+            }
+            return default(T);
         }
     }
 }

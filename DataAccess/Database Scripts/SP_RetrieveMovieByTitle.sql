@@ -1,9 +1,8 @@
-﻿CREATE PROCEDURE RET_MOVIE_BY_ID_PR
-    @P_ID INT
+﻿CREATE PROCEDURE [dbo].[RET_MOVIE_BY_TITLE_PR]
+@P_TITLE NVARCHAR(75)
 AS
 BEGIN
 	SELECT Id, Created, Updated, Title, Description, ReleaseDate, Genre, Director
 	FROM TBL_Movie
-    WHERE Id = @P_ID
+	WHERE Title = @P_TITLE
 END
-GO

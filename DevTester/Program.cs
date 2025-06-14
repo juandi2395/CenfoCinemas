@@ -1,4 +1,5 @@
-﻿using DataAccess.CRUD;
+﻿using CoreApp;
+using DataAccess.CRUD;
 using DataAccess.DAO;
 using DTOs;
 using Newtonsoft.Json;
@@ -51,8 +52,9 @@ public class Program
             Console.WriteLine("---- USER MENU ----");
             Console.WriteLine("1. Insert User");
             Console.WriteLine("2. Show Users");
-            Console.WriteLine("3. Delete User");
-            Console.WriteLine("4. Back");
+            Console.WriteLine("3. Show User By ID");
+            Console.WriteLine("4. Delete User");
+            Console.WriteLine("5. Back");
             Console.WriteLine("-------------------");
             Console.Write("Select an option: ");
             string option = Console.ReadLine();
@@ -63,21 +65,16 @@ public class Program
                     InsertUser();
                     break;
                 case "2":
-                    Console.Clear();
-                    var uCrud = new UserCrudFactory();
-                    var listUsers = uCrud.RetrieveAll<User>();
-                    foreach(var u in listUsers)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(u, Formatting.Indented));
-                    }
-                    Console.WriteLine("Press any key to continue...");
-                    Console.ReadKey();
+                    PrintUsers();
                     break;
                 case "3":
+                    PrintUserByID();
+                    break;
+                case "4":
                     Console.WriteLine("Delete User logic here...");
                     Console.ReadKey();
                     break;
-                case "4":
+                case "5":
                     exit = true;
                     break;
                 default:
@@ -110,15 +107,7 @@ public class Program
                     InsertMovie();
                     break;
                 case "2":
-                    Console.Clear();
-                    var mCrud = new MovieCrudFactory();
-                    var listMovies = mCrud.RetrieveAll<Movie>();
-                    foreach (var u in listMovies)
-                    {
-                        Console.WriteLine(JsonConvert.SerializeObject(u, Formatting.Indented));
-                    }
-                    Console.WriteLine("Press any key to continue...");
-                    Console.ReadKey();
+                    PrintMovies();
                     break;
                 case "3":
                     Console.WriteLine("Delete Movie logic here...");
@@ -179,12 +168,15 @@ public class Program
             Status = status
         };
 
-        var uCrud = new UserCrudFactory();
-        uCrud.Create(user);
+        /*var uCrud = new UserCrudFactory();
+        uCrud.Create(user);*/
 
         //SqlDAO.GetInstance().ExecuteProcedure(sqlOperation);
 
-        Console.WriteLine("User inserted successfully. Press any key to continue...");
+        var userManager = new UserManager();
+        userManager.Create(user);
+
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -227,14 +219,58 @@ public class Program
             ReleaseDate = releaseDate
         };
 
-        var mCrud = new MovieCrudFactory();
-        mCrud.Create(movie);
+        //var mCrud = new MovieCrudFactory();
+        //mCrud.Create(movie);
 
         //SqlDAO.GetInstance().ExecuteProcedure(sqlOperation);
 
-        Console.WriteLine("Movie inserted successfully. Press any key to continue...");
+        var movieManager = new MovieManager();
+        movieManager.Create(movie);
+
+        Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
     }
 
+    private static void PrintUsers()
+    {
+        Console.Clear();
+        var uCrud = new UserCrudFactory();
+        var listUsers = uCrud.RetrieveAll<User>();
+        foreach (var u in listUsers)
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(u, Formatting.Indented));
+        }
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
+    }
 
+    private static void PrintMovies()
+    {
+        Console.Clear();
+        var mCrud = new MovieCrudFactory();
+        var listMovies = mCrud.RetrieveAll<Movie>();
+        foreach (var m in listMovies)
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(m, Formatting.Indented));
+        }
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
+    }
+
+    private static void PrintUserByID()
+    {
+        Console.Clear();
+        Console.Write("Enter User ID: ");
+        string id = Console.ReadLine();
+        int userId = int.Parse(id);
+
+        var uCrud = new UserCrudFactory();
+        var user = uCrud.RetrieveById<User>(userId);
+        if (user != null)
+        {
+            Console.WriteLine(JsonConvert.SerializeObject(user, Formatting.Indented));
+        }
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using DataAccess.DAO;
 using DTOs;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,18 +46,33 @@ namespace DataAccess.CRUD
 
             var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
 
-            foreach (var row in lstResults)
+            if (lstResults.Count > 0)
             {
-                var movie = BuildMovie(row);
-                lstMovies.Add((T)Convert.ChangeType(movie, typeof(T)));
+                foreach (var row in lstResults)
+                {
+                    var movie = BuildMovie(row);
+                    lstMovies.Add((T)Convert.ChangeType(movie, typeof(T)));
 
+                }
             }
             return lstMovies;
         }
 
-        public override T RetrieveById<T>()
+        public override T RetrieveById<T>(int iD)
         {
-            throw new NotImplementedException();
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_MOVIE_BY_ID_PR" };
+            sqlOperation.Parameters.Add(new SqlParameter("P_ID", iD));
+
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                var movie = BuildMovie(row);
+                return (T)Convert.ChangeType(movie, typeof(T));
+            }
+
+            return default(T);
         }
 
         public override void Update(BaseDTO baseDTO)
@@ -78,6 +94,20 @@ namespace DataAccess.CRUD
                 Director = (string)row["Director"]
             };
             return movie;
+        }
+
+        public T RetrieveMovieByTitle<T>(Movie movie)
+        {
+            var sqlOperation = new SqlOperation() { ProcedureName = "RET_MOVIE_BY_TITLE_PR" };
+            sqlOperation.AddStringParameter("P_Title", movie.Title);
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
+            if (lstResults.Count > 0)
+            {
+                var row = lstResults[0];
+                var retrievedUser = BuildMovie(row);
+                return (T)Convert.ChangeType(retrievedUser, typeof(T));
+            }
+            return default(T);
         }
     }
 }

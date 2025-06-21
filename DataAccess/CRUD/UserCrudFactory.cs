@@ -29,9 +29,12 @@ namespace DataAccess.CRUD
             _sqlDao.ExecuteProcedure(sqlOperation);
         }
 
-        public override void Delete(BaseDTO baseDTO)
+        public override void Delete(int iD)
         {
-            throw new NotImplementedException();
+            var sqlOperation = new SqlOperation() { ProcedureName = "DEL_USER_PR" };
+            sqlOperation.Parameters.Add(new SqlParameter("P_ID", iD));
+
+            var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
         }
 
         public override T Retrieve<T>()
@@ -77,7 +80,17 @@ namespace DataAccess.CRUD
 
         public override void Update(BaseDTO baseDTO)
         {
-            throw new NotImplementedException();
+            var sqlOperation = new SqlOperation() { ProcedureName = "UPD_USER_PR" };
+            var user = baseDTO as User;
+            sqlOperation.Parameters.Add(new SqlParameter("P_ID", (user.ID);
+            sqlOperation.AddStringParameter("P_UserCode", user.UserCode);
+            sqlOperation.AddStringParameter("P_Name", user.Name);
+            sqlOperation.AddStringParameter("P_Email", user.Email);
+            sqlOperation.AddStringParameter("P_Password", user.Password);
+            sqlOperation.AddDateTimeParam("P_BirthDate", user.BirthDate);
+            sqlOperation.AddStringParameter("P_Status", user.Status);
+
+            var listResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
         }
 
         // Metodo que convierte el dicccionario en un usuario

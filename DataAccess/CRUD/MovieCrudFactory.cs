@@ -28,7 +28,7 @@ namespace DataAccess.CRUD
             _sqlDao.ExecuteProcedure(sqlOperation);
         }
 
-        public override void Delete(BaseDTO baseDTO)
+        public override void Delete(int iD)
         {
             throw new NotImplementedException();
         }

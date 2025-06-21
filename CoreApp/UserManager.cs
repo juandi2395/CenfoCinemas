@@ -52,7 +52,8 @@ namespace CoreApp
                 ManageException (ex);
             }
         }
-        private bool isOver18(User user) { 
+        private bool isOver18(User user) 
+        { 
 
             var currentDate = DateTime.Now;
             int age = currentDate.Year - user.BirthDate.Year;
@@ -63,7 +64,71 @@ namespace CoreApp
             }
             return age >= 18;
         }
-    }
+
+        public List<User> RetrieveAll()
+        {
+            var uCrud = new UserCrudFactory();
+
+            try
+            { 
+                if(uCrud.RetrieveAll<User>().Count > 0)
+                {
+                    return uCrud.RetrieveAll<User>();
+                }
+                else
+                {
+                    throw new Exception("No users found.");
+                }
+            }
+            catch (Exception ex)
+            { 
+                ManageException(ex);
+            }
+            return null;
+        }
+
+        public void Delete(int id)
+        {
+            var uCrud = new UserCrudFactory();
+            try
+            {
+                var user = uCrud.RetrieveById<User>(id);
+                if (user != null)
+                {
+                    uCrud.Delete(id);
+                }
+                else
+                {
+                    throw new Exception("User not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+        }
+
+        public void Update(User user)
+        {
+            var uCrud = new UserCrudFactory();
+            try
+            {
+                if (uCrud.RetrieveById<User>(user.ID) != null)
+                {
+                    uCrud.Update(user);
+                }
+                else
+                {
+                    throw new Exception("User not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+        }
+
+        }
 
 
 }

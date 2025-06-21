@@ -82,7 +82,7 @@ namespace DataAccess.CRUD
         {
             var sqlOperation = new SqlOperation() { ProcedureName = "UPD_USER_PR" };
             var user = baseDTO as User;
-            sqlOperation.Parameters.Add(new SqlParameter("P_ID", (user.ID);
+            sqlOperation.Parameters.Add(new SqlParameter("P_ID", (user.ID)));
             sqlOperation.AddStringParameter("P_UserCode", user.UserCode);
             sqlOperation.AddStringParameter("P_Name", user.Name);
             sqlOperation.AddStringParameter("P_Email", user.Email);

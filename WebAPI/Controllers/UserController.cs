@@ -42,6 +42,45 @@ namespace WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("RetrieveByEmail")]
+        public ActionResult RetrieveByEmail(string email)
+        {
+            try
+            {
+                var um = new UserManager();
+                var user = um.RetrieveByEmail(email);
+                if (user == null)
+                {
+                    return NotFound($"User with email {email} not found.");
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("RetrieveByID")]
+        public ActionResult RetrieveById(int id)
+        {
+            try
+            {
+                var um = new UserManager();
+                var user = um.RetrieveById(id);
+                if (user == null)
+                {
+                    return NotFound($"User with ID {id} not found.");
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
         [HttpPut]
         [Route("Update")]

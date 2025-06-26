@@ -108,6 +108,71 @@ namespace CoreApp
             }
         }
 
+        public User RetrieveByUserCode(string userCode)
+        {
+            var uCrud = new UserCrudFactory();
+            try
+            {
+                var user = uCrud.RetrieveByUserCode<User>(userCode);
+                if (user != null)
+                {
+                    return user;
+                }
+                else
+                {
+                    throw new Exception("User not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+            return null;
+        }
+
+        public User RetrieveByEmail(string email)
+        {
+            var uCrud = new UserCrudFactory();
+            try
+            {
+                var user = uCrud.RetrieveByEmail<User>(email);
+                if (user != null)
+                {
+                    return user;
+                }
+                else
+                {
+                    throw new Exception("User not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+            return null;
+        }
+        public User RetrieveById(int id)
+        {
+            var uCrud = new UserCrudFactory();
+            try
+            {
+                var user = uCrud.RetrieveById<User>(id);
+                if (user != null)
+                {
+                    return user;
+                }
+                else
+                {
+                    throw new Exception("User not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+            return null;
+        }
+
         public void Update(User user)
         {
             var uCrud = new UserCrudFactory();

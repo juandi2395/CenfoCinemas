@@ -20,11 +20,11 @@ namespace CoreApp
                     var uCrud = new UserCrudFactory();
 
                     // Consultamos en BD si existe un usario con ese codigo
-                    var uExist = uCrud.RetrieveByUserCode<User>(user);
+                    var uExist = uCrud.RetrieveByUserCode<User>(user.UserCode);
 
                     if (uExist == null) 
                     {
-                        uExist = uCrud.RetrieveByEmail<User>(user);
+                        uExist = uCrud.RetrieveByEmail<User>(user.Email);
 
                         if (uExist == null)
                         {

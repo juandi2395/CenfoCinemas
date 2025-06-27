@@ -112,10 +112,10 @@ namespace DataAccess.CRUD
             return user;
         }
 
-        public T RetrieveByEmail<T>(String userEmail)
+        public T RetrieveByEmail<T>(User user)
         {
             var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_EMAIL_PR" };
-            sqlOperation.AddStringParameter("P_EMAIL", userEmail);
+            sqlOperation.AddStringParameter("P_EMAIL", user.Email);
             var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
             if (lstResults.Count > 0)
             {
@@ -126,10 +126,10 @@ namespace DataAccess.CRUD
             return default(T);
         }
 
-        public T RetrieveByUserCode<T>(String userCode)
+        public T RetrieveByUserCode<T>(User user)
         {
             var sqlOperation = new SqlOperation() { ProcedureName = "RET_USER_BY_USER_CODE_PR" };
-            sqlOperation.AddStringParameter("P_CODE", userCode);
+            sqlOperation.AddStringParameter("P_CODE", user.UserCode);
             var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
             if (lstResults.Count > 0)
             {

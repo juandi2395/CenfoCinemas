@@ -49,10 +49,32 @@ namespace WebAPI.Controllers
             try
             {
                 var um = new UserManager();
-                var user = um.RetrieveByEmail(email);
-                if (user == null)
+                var user = new User { UserCode = email };
+                var userTemp = um.RetrieveByEmail(user);
+                if (userTemp == null)
                 {
                     return NotFound($"User with email {email} not found.");
+                }
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("RetrieveByUserCode")]
+        public ActionResult RetrieveByUserCode(string userCode)
+        {
+            try
+            {
+                var um = new UserManager();
+                var user = new User { UserCode = userCode };
+                var userTemp = um.RetrieveByUserCode(user);
+                if (userTemp == null)
+                {
+                    return NotFound($"User with code {userCode} not found.");
                 }
                 return Ok(user);
             }

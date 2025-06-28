@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
     public class UserController : Controller
     {
         [HttpPost]
-        [Route("create")]
+        [Route("Create")]
         public ActionResult Create(User user) { 
             try
             {

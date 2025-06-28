@@ -37,11 +37,6 @@ namespace DataAccess.CRUD
             var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
         }
 
-        public override T Retrieve<T>()
-        {
-            throw new NotImplementedException();
-        }
-
         public override List<T> RetrieveAll<T>()
         {
             var lstUsers = new List<T>();

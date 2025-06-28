@@ -34,5 +34,94 @@ namespace CoreApp
                 ManageException(ex);
             }
         }
+
+        public List<Movie> RetrieveAll()
+        {
+            var mCrud = new MovieCrudFactory();
+
+            try
+            {
+                if (mCrud.RetrieveAll<Movie>().Count > 0)
+                {
+                    return mCrud.RetrieveAll<Movie>();
+                }
+                else
+                {
+                    throw new Exception("No movies found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+            return null;
+        }
+
+        public void Delete(int id)
+        {
+            var mCrud = new MovieCrudFactory();
+            try
+            {
+                var movie = mCrud.RetrieveById<Movie>(id);
+                if (movie != null)
+                {
+                    mCrud.Delete(id);
+                }
+                else
+                {
+                    throw new Exception("Movie not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+        }
+        public Movie RetrieveById(int id)
+        {
+            var mCrud = new MovieCrudFactory();
+            try
+            {
+                var movie = mCrud.RetrieveById<Movie>(id);
+                if (movie != null)
+                {
+                    return movie;
+                }
+                else
+                {
+                    throw new Exception("Movie not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+            return null;
+        }
+
+        public void Update(Movie movie)
+        {
+            var mCrud = new MovieCrudFactory();
+            try
+            {
+                if (mCrud.RetrieveById<Movie>(movie.ID) != null)
+                {
+                    mCrud.Update(movie);
+                }
+                else
+                {
+                    throw new Exception("Movie not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                ManageException(ex);
+            }
+        }
+
+            
+
     }
+
+
 }

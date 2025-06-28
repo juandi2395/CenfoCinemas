@@ -28,10 +28,11 @@ namespace DataAccess.CRUD
             _sqlDao.ExecuteProcedure(sqlOperation);
         }
 
-        public override void Delete(int iD)
+        public override void Delete(BaseDTO baseDTO)
         {
+            var movie = baseDTO as Movie;
             var sqlOperation = new SqlOperation() { ProcedureName = "DEL_MOVIE_PR" };
-            sqlOperation.Parameters.Add(new SqlParameter("P_ID", iD));
+            sqlOperation.Parameters.Add(new SqlParameter("P_ID", movie.ID));
 
             var lstResults = _sqlDao.ExecuteQueryProcedure(sqlOperation);
         }

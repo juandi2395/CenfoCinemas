@@ -20,7 +20,7 @@ namespace DataAccess.CRUD
 
         public abstract void Create(BaseDTO baseDTO);
         public abstract void Update(BaseDTO baseDTO);
-        public abstract void Delete(int iD);
+        public abstract void Delete(BaseDTO baseDTO);
         public abstract T RetrieveById<T>(int iD);   
         public abstract List<T> RetrieveAll<T>();
 

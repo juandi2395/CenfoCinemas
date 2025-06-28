@@ -57,15 +57,15 @@ namespace CoreApp
             return null;
         }
 
-        public void Delete(int id)
+        public void Delete(Movie movie)
         {
             var mCrud = new MovieCrudFactory();
             try
             {
-                var movie = mCrud.RetrieveById<Movie>(id);
-                if (movie != null)
+                var movieTemp = mCrud.RetrieveById<Movie>(movie.ID);
+                if (movieTemp != null)
                 {
-                    mCrud.Delete(id);
+                    mCrud.Delete(movie);
                 }
                 else
                 {

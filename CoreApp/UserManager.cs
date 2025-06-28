@@ -87,15 +87,15 @@ namespace CoreApp
             return null;
         }
 
-        public void Delete(int id)
+        public void Delete(User user)
         {
             var uCrud = new UserCrudFactory();
             try
             {
-                var user = uCrud.RetrieveById<User>(id);
-                if (user != null)
+                var userTemp = uCrud.RetrieveById<User>(user.ID);
+                if (userTemp != null)
                 {
-                    uCrud.Delete(id);
+                    uCrud.Delete(user);
                 }
                 else
                 {

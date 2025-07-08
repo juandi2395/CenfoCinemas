@@ -100,7 +100,7 @@ function UsersViewController()
 
         // Enviar data al API
         var ca = new ControlActions();
-        var urlService = this.ApiEndPointName + "/Update";
+        var urlService = this.ApiEndPointName + "/Create";
 
         ca.PostToAPI(urlService, userDTO, function () {
             // Recargar la tabla
